@@ -1,12 +1,13 @@
 package parser;
 
 import io.vavr.control.Try;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import parser.result.Result;
+import parser.strategy.AverageValueInPeriodStrategy;
 import parser.strategy.AverageValueStrategy;
 import parser.strategy.SumLastTenValueStrategy;
-import parser.strategy.AverageValueInPeriodStrategy;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +29,8 @@ public class Parser {
     private final static String NAME3 = "INSTRUMENT3";
 
     private File file;
+
+    @Getter
     private Map<String, Result> results;
 
     public Parser(File file) {
