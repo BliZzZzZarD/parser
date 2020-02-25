@@ -13,6 +13,6 @@ public class ExitCommand implements Command {
     public void execute() {
         log.info("execute exit");
 
-        terminal.setTerminalLaunched(false);
+        terminal.terminate();
     }
 }

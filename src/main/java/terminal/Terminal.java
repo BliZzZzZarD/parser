@@ -19,9 +19,8 @@ public class Terminal {
     private static final String CD = "cd";
 
     private static final Map<String, Command> commands = new HashMap<>();
-    private Command wrongCommand = new WrongCommand();
 
-    @Setter
+    private Command wrongCommand = new WrongCommand();
     private boolean terminalLaunched = false;
 
     @Setter @Getter
@@ -95,5 +94,9 @@ public class Terminal {
     private void cleanTerminal() {
         scanner.close();
         splitLine = null;
+    }
+
+    public void terminate() {
+        terminalLaunched = false;
     }
 }
