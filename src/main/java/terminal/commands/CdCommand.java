@@ -33,9 +33,9 @@ public class CdCommand implements Command {
         } else if (POINT.equals(newDirectory)) {
             processLiftingUp();
         } else if (EMPTY.equals(newDirectory)){
-            print("Specify directory. Try again.");
+            print("Cannot cd. Specify directory. Try again.");
         } else {
-            print("Unknown directory. Try again.");
+            print("Cannot cd. Unknown directory. Try again.");
         }
     }
 
@@ -48,7 +48,7 @@ public class CdCommand implements Command {
         if (newFolderOptional.isPresent()) {
             processFilteredDirectory(newFolderOptional.get());
         } else {
-            print("Unknown directory. Try again.");
+            print("Cannot cd. Unknown directory. Try again.");
         }
     }
 
@@ -56,7 +56,7 @@ public class CdCommand implements Command {
         if (file.isDirectory()) {
             terminal.setFolder(file);
         } else {
-            print("It's not a directory. Try again.");
+            print("Cannot cd. It's not a directory. Try again.");
         }
     }
 

@@ -32,9 +32,9 @@ public class ParseCommand implements Command {
         if (folderNameList.contains(parseFileName)) {
             processExistingFileName(folder, parseFileName);
         } else if (EMPTY.equals(parseFileName)){
-            print("Specify file. Try again.");
+            print("Cannot parse. Specify file. Try again.");
         } else {
-            print("Unknown file. Try again.");
+            print("Cannot parse. Unknown file. Try again.");
         }
     }
 
@@ -47,7 +47,7 @@ public class ParseCommand implements Command {
         if (fileParseOptional.isPresent()) {
             processFilteredFile(fileParseOptional.get());
         } else {
-            print("Unknown directory. Try again.");
+            print("Cannot parse. Unknown directory. Try again.");
         }
     }
 
@@ -55,13 +55,13 @@ public class ParseCommand implements Command {
         if (file.isFile()) {
             processParsing(file);
         } else {
-            print("It's not a file. Try again.");
+            print("Cannot parse. It's not a file. Try again.");
         }
     }
 
     private void processParsing(File file) {
         if (isFormatChecked(file)) {
-            print("Only *.txt file parse.Try again.");
+            print("Cannot parse. Only *.txt file parse.Try again.");
         } else {
             Parser parser = new Parser(file);
             parser.start();

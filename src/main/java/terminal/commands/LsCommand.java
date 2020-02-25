@@ -19,6 +19,8 @@ public class LsCommand implements Command {
     public void execute() {
         log.info("execute ls");
 
+        println("Directory ls:");
+
         Arrays
                 .asList(Optional.ofNullable(terminal.getFolder().listFiles()).orElse(new File[] {}))
                 .forEach(file -> print(String.format(FILE_NAME_TEMPLATE, file.getName())));

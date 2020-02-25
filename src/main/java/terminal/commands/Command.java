@@ -10,4 +10,8 @@ public interface Command {
     default void print(String text) {
         System.out.print(text);
     }
+
+    default void println(String text) {
+        System.out.println(text);
+    }
 }
