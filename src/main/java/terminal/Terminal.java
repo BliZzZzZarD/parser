@@ -18,6 +18,9 @@ public class Terminal {
     private static final String LS = "ls";
     private static final String CD = "cd";
 
+    private Command wrongCommand = new WrongCommand();
+    private Map<String, Command> commands = new HashMap<>();
+
     @Setter @Getter
     private boolean terminalLaunched = true;
 
@@ -27,10 +30,7 @@ public class Terminal {
     @Setter @Getter
     private List<String> splitLine;
 
-    private Command wrongCommand = new WrongCommand();
-
     private static volatile Terminal terminal;
-    private static volatile Map<String, Command> commands;
 
     private Scanner scanner;
 
@@ -42,7 +42,6 @@ public class Terminal {
                 if (tempTerminal == null) {
                     log.info("initializing terminal");
                     terminal = tempTerminal = new Terminal();
-                    initCommands();
                 }
             }
         }
@@ -50,17 +49,9 @@ public class Terminal {
         return tempTerminal;
     }
 
-    private static void initCommands() {
-        log.info("initializing terminal commands");
-        commands = new HashMap<>();
-        commands.put(EXIT, new ExitCommand(terminal));
-        commands.put(HELP, new HelpCommand());
-        commands.put(LS, new LsCommand(terminal));
-        commands.put(CD, new CdCommand(terminal));
-        commands.put(PARSE, new ParseCommand(terminal));
-    }
-
     public void start() {
+        log.info("terminal has been started");
+        initCommands();
         scanner = new Scanner(System.in);
 
         while (terminalLaunched) {
@@ -68,7 +59,16 @@ public class Terminal {
             readLine();
             execute();
         }
+        log.info("terminal has been terminated");
+    }
 
+    private void initCommands() {
+        log.info("initializing terminal commands");
+        commands.put(EXIT, new ExitCommand(terminal));
+        commands.put(HELP, new HelpCommand());
+        commands.put(LS, new LsCommand(terminal));
+        commands.put(CD, new CdCommand(terminal));
+        commands.put(PARSE, new ParseCommand(terminal));
     }
 
     private void printCurrentDirectory() {
