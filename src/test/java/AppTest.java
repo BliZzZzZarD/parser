@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,7 +42,6 @@ public class AppTest {
         System.setOut(stream);
 
         Terminal terminal = Terminal.getTerminal();
-        AtomicReference<String> result = new AtomicReference<>();
 
         Try
                 .run(terminal::start)
