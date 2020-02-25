@@ -2,36 +2,25 @@ package parser.strategy;
 
 import lombok.extern.slf4j.Slf4j;
 import utils.DateAdapter;
+import utils.LimitedPriorityBlockingQueue;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 public class SumLastTenValueStrategy implements CalculateStrategy {
     private final static Comparator<List<String>> comparator = Comparator.comparing((List<String> args) -> DateAdapter.parse(args.get(1)));
 
-    private PriorityBlockingQueue<List<String>> priorityQueue;
+    private LimitedPriorityBlockingQueue<List<String>> priorityQueue;
 
     public SumLastTenValueStrategy() {
-        priorityQueue = new PriorityBlockingQueue<>(10, comparator);
+        priorityQueue = new LimitedPriorityBlockingQueue<>(10, comparator);
     }
 
     @Override
     public void calculate(List<String> args) {
         log.info("calculate result for: {}", args.get(0));
-        if (priorityQueue.size() < 10) {
-            priorityQueue.add(args);
-        } else {
-            analysisQueue(priorityQueue.peek(), args);
-        }
-    }
-
-    private void analysisQueue(List<String> header, List<String> args) {
-        if (DateAdapter.parse(header.get(1)).isBefore(DateAdapter.parse(args.get(1)))) {
-            priorityQueue.remove(header);
-            priorityQueue.add(args);
-        }
+        priorityQueue.add(args);
     }
 
     @Override
