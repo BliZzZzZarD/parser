@@ -21,18 +21,22 @@ public class AppTest {
 
     @Test
     void testParser() {
-        Optional<URL> urlOptional = Optional.ofNullable(getClass().getClassLoader().getResource("parse.txt"));
+        Optional
+                .ofNullable(getClass().getClassLoader().getResource("parse.txt"))
+                .ifPresentOrElse(this::parserFile, this::logError);
+    }
 
-        if (urlOptional.isPresent()) {
-            File file = new File(urlOptional.get().getFile());
-            Parser parser = new Parser(file);
-            parser.start();
+    private void parserFile(URL url) {
+        File file = new File(url.getFile());
+        Parser parser = new Parser(file);
+        parser.start();
 
-            assertTrue(parser.getResults().get(NAME1).getResult().contains("average value is 33.22"));
-            assertTrue(parser.getResults().get(NAME2).getResult().contains("average value in the period with 01-Nov-2014 to 30-Nov-2014 is 32.87"));
-            assertTrue(parser.getResults().get(NAME3).getResult().contains("[INSTRUMENT3, 06-Nov-2014, 33.48]"));
-        } else {
-            throw new RuntimeException("No file url exist");
-        }
+        assertTrue(parser.getResults().get(NAME1).getResult().contains("average value is 33.22"));
+        assertTrue(parser.getResults().get(NAME2).getResult().contains("average value in the period with 01-Nov-2014 to 30-Nov-2014 is 32.87"));
+        assertTrue(parser.getResults().get(NAME3).getResult().contains("[INSTRUMENT3, 06-Nov-2014, 33.48]"));
+    }
+
+    private void logError() {
+        throw new RuntimeException("No file url exist");
     }
 }
