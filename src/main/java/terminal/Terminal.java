@@ -18,11 +18,11 @@ public class Terminal {
     private static final String LS = "ls";
     private static final String CD = "cd";
 
+    private static final Map<String, Command> commands = new HashMap<>();
     private Command wrongCommand = new WrongCommand();
-    private Map<String, Command> commands = new HashMap<>();
 
-    @Setter @Getter
-    private boolean terminalLaunched = true;
+    @Setter
+    private boolean terminalLaunched = false;
 
     @Setter @Getter
     private File folder = new File(new File("").getAbsolutePath());
@@ -42,6 +42,7 @@ public class Terminal {
                 if (tempTerminal == null) {
                     log.info("initializing terminal");
                     terminal = tempTerminal = new Terminal();
+                    initCommands();
                 }
             }
         }
@@ -49,26 +50,33 @@ public class Terminal {
         return tempTerminal;
     }
 
-    public void start() {
-        log.info("terminal has been started");
-        initCommands();
-        scanner = new Scanner(System.in);
-
-        while (terminalLaunched) {
-            printCurrentDirectory();
-            readLine();
-            execute();
-        }
-        log.info("terminal has been terminated");
-    }
-
-    private void initCommands() {
+    private static void initCommands() {
         log.info("initializing terminal commands");
         commands.put(EXIT, new ExitCommand(terminal));
         commands.put(HELP, new HelpCommand());
         commands.put(LS, new LsCommand(terminal));
         commands.put(CD, new CdCommand(terminal));
         commands.put(PARSE, new ParseCommand(terminal));
+    }
+
+    public void start() {
+        log.info("terminal has been started");
+        startPreparing();
+        startProcessing();
+        log.info("terminal has been terminated");
+    }
+
+    private void startPreparing() {
+        terminalLaunched = true;
+        scanner = new Scanner(System.in);
+    }
+
+    private void startProcessing() {
+        while (terminalLaunched) {
+            printCurrentDirectory();
+            readLine();
+            execute();
+        }
     }
 
     private void printCurrentDirectory() {
