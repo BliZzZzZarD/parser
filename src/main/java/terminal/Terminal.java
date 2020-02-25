@@ -27,7 +27,7 @@ public class Terminal {
     @Setter @Getter
     private File folder = new File(new File("").getAbsolutePath());
 
-    @Setter @Getter
+    @Getter
     private List<String> splitLine;
 
     private static volatile Terminal terminal;
@@ -63,6 +63,7 @@ public class Terminal {
         log.info("terminal has been started");
         startPreparing();
         startProcessing();
+        cleanTerminal();
         log.info("terminal has been terminated");
     }
 
@@ -89,5 +90,10 @@ public class Terminal {
 
     private void execute() {
         commands.getOrDefault(splitLine.get(0), wrongCommand).execute();
+    }
+
+    private void cleanTerminal() {
+        scanner.close();
+        splitLine = null;
     }
 }
