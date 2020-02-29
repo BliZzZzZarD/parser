@@ -1,4 +1,4 @@
-package parser.result;
+package parser.aggregations;
 
 import lombok.experimental.Accessors;
 

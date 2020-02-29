@@ -2,8 +2,8 @@ package parser.strategy;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import parser.aggregations.Adder;
 import parser.dto.ParsedRow;
-import parser.result.Adder;
 import utils.DateUtils;
 
 import java.time.LocalDate;
