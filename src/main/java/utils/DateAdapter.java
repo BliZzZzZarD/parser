@@ -13,7 +13,11 @@ public abstract class DateAdapter {
         return Try.of(() -> date.format(DEFAULT_FORMATTER)).getOrElse("");
     }
 
-    public static LocalDate parse(String stringDate) {
+    public static LocalDate parseOrNull(String stringDate) {
         return Try.of(() -> LocalDate.parse(stringDate, DEFAULT_FORMATTER)).getOrNull();
+    }
+
+    public static LocalDate parse(String stringDate) {
+        return LocalDate.parse(stringDate, DEFAULT_FORMATTER);
     }
 }

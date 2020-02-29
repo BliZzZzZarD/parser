@@ -11,7 +11,7 @@ import java.util.*;
 @Slf4j
 public class Terminal {
     private static final String SPACE = " ";
-    private static final String PATH = "\n%s~$:";
+    private static final String PATH = "\n%s~$: ";
     private static final String PARSE = "parse";
     private static final String EXIT = "exit";
     private static final String HELP = "help";

@@ -1,10 +1,9 @@
 package parser.strategy;
 
-import java.util.List;
+import parser.dto.ParsedRow;
 
 public interface CalculateStrategy {
-    String EMPTY_RESULT = "EMPTY RESULT";
+    void calculate(ParsedRow row);
 
-    void calculate(List<String> args);
     String getResult();
 }

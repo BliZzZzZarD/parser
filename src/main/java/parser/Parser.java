@@ -1,28 +1,29 @@
 package parser;
 
-import io.vavr.control.Try;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
+import parser.dto.ParsedRow;
+import parser.dto.ParsedRowMapper;
 import parser.result.Result;
 import parser.strategy.AverageValueInPeriodStrategy;
 import parser.strategy.AverageValueStrategy;
 import parser.strategy.SumLastTenValueStrategy;
+import utils.DateAdapter;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Slf4j
 public class Parser {
     private final static String RESULT_TEMPLATE = "For %s result of calculation: %s";
+
+    private boolean success = true;
 
     private final static String NAME1 = "INSTRUMENT1";
     private final static String NAME2 = "INSTRUMENT2";
@@ -42,7 +43,7 @@ public class Parser {
     private void fillResults() {
         results = new HashMap<>();
         results.put(NAME1, new Result(new AverageValueStrategy()));
-        results.put(NAME2, new Result(new AverageValueInPeriodStrategy("01-Nov-2014", "30-Nov-2014")));
+        results.put(NAME2, new Result(new AverageValueInPeriodStrategy(DateAdapter.parseOrNull("01-Nov-2014"), DateAdapter.parseOrNull(("30-Nov-2014")))));
         results.put(NAME3, new Result(new SumLastTenValueStrategy()));
     }
 
@@ -55,26 +56,29 @@ public class Parser {
     private void parseFile() {
         try (Stream<String> stream = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8).lines()) {
             stream.forEach(this::parseAndAnalysisRow);
-        } catch (IOException e) {
-            printReadError(e);
+        } catch (Exception e) {
+            handleError(e);
         }
     }
 
-    private void parseAndAnalysisRow(String row) {
-        List<String> splitRow = Arrays.asList(row.split(","));
-        Result result = Try.of(()-> results.get(splitRow.get(0))).getOrNull();
-        if (ObjectUtils.allNotNull(result)) {
-            results.get(splitRow.get(0)).calculate(splitRow);
-        }
+    private void parseAndAnalysisRow(String rowString) {
+        ParsedRow row = ParsedRowMapper.getParserRow(rowString);
+
+        Optional
+                .ofNullable(results.get(row.getName()))
+                .ifPresent(result -> result.calculate(row));
     }
 
-    private void printReadError(IOException e) {
+    private void handleError(Exception e) {
         log.error("An error has occurred while reading the file. Error: {}", e.getMessage());
-        System.out.print("An error has occurred while reading the file. Try again.");
+
+        success = false;
+        System.out.print("An error has occurred while reading the file. Try again.\n");
     }
 
     private void showResults() {
-        results.forEach(this::showResult);
+        if (success)
+            results.forEach(this::showResult);
     }
 
     private void showResult(String name, Result result) {
