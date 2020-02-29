@@ -16,6 +16,6 @@ public class Adder {
     }
 
     public BigDecimal getAverageValue() {
-        return sum.divide(new BigDecimal(counter), RoundingMode.CEILING);
+        return counter != 0  ? sum.divide(new BigDecimal(counter), RoundingMode.CEILING) : BigDecimal.ZERO;
     }
 }

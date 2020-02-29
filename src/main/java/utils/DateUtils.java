@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public abstract class DateAdapter {
+public abstract class DateUtils {
     private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
 
     public static String format(LocalDate date) {
@@ -19,5 +19,13 @@ public abstract class DateAdapter {
 
     public static LocalDate parse(String stringDate) {
         return LocalDate.parse(stringDate, DEFAULT_FORMATTER);
+    }
+
+    public static boolean dateIsEqualsOrAfter(LocalDate date, LocalDate comparisonDate) {
+        return date.isAfter(comparisonDate) || date.equals(comparisonDate);
+    }
+
+    public static boolean dateIsEqualsOrBefore(LocalDate date, LocalDate comparisonDate) {
+        return date.isBefore(comparisonDate) || date.equals(comparisonDate);
     }
 }

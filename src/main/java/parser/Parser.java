@@ -6,9 +6,8 @@ import parser.dto.ParsedRow;
 import parser.dto.ParsedRowMapper;
 import parser.result.Result;
 import parser.strategy.AverageValueInPeriodStrategy;
-import parser.strategy.AverageValueStrategy;
 import parser.strategy.SumLastTenValueStrategy;
-import utils.DateAdapter;
+import utils.DateUtils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -42,8 +41,8 @@ public class Parser {
 
     private void fillResults() {
         results = new HashMap<>();
-        results.put(NAME1, new Result(new AverageValueStrategy()));
-        results.put(NAME2, new Result(new AverageValueInPeriodStrategy(DateAdapter.parseOrNull("01-Nov-2014"), DateAdapter.parseOrNull(("30-Nov-2014")))));
+        results.put(NAME1, new Result(new AverageValueInPeriodStrategy()));
+        results.put(NAME2, new Result(new AverageValueInPeriodStrategy(DateUtils.parseOrNull("01-Nov-2014"), DateUtils.parseOrNull(("30-Nov-2014")))));
         results.put(NAME3, new Result(new SumLastTenValueStrategy()));
     }
 

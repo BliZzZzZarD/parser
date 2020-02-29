@@ -1,7 +1,7 @@
 package parser.dto;
 
 import lombok.extern.slf4j.Slf4j;
-import utils.DateAdapter;
+import utils.DateUtils;
 
 import java.math.BigDecimal;
 
@@ -12,7 +12,7 @@ public abstract class ParsedRowMapper {
 
         return new ParsedRow()
                 .setName(splittedRow[0])
-                .setDate(DateAdapter.parse(splittedRow[1]))
+                .setDate(DateUtils.parse(splittedRow[1]))
                 .setPrice(new BigDecimal(splittedRow[2]));
     }
 }

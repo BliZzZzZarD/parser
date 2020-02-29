@@ -1,20 +1,26 @@
 package parser.strategy;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import parser.dto.ParsedRow;
 import parser.result.Adder;
-import utils.DateAdapter;
+import utils.DateUtils;
 
 import java.time.LocalDate;
 
 @Slf4j
 public class AverageValueInPeriodStrategy implements CalculateStrategy {
-    private final static String RESULT_TEMPLATE = "average value in the period with %s to %s is %s";
+    private final static String RESULT_TEMPLATE_PERIOD = "average value in the period with %s to %s is %s";
+    private final static String RESULT_TEMPLATE = "average value is %s";
 
     private Adder adder;
 
     private LocalDate dateFrom;
     private LocalDate dateTo;
+
+    public AverageValueInPeriodStrategy() {
+        adder = new Adder();
+    }
 
     public AverageValueInPeriodStrategy(LocalDate dateFrom, LocalDate dateTo) {
         adder = new Adder();
@@ -26,25 +32,25 @@ public class AverageValueInPeriodStrategy implements CalculateStrategy {
     public void calculate(ParsedRow row) {
         log.info("calculate result for: {}", row.getName());
 
-        if (dateIsEqualsOrAfter(row.getDate(), dateFrom) && dateIsEqualsOrBefore(row.getDate(), dateTo)) {
+        if (ObjectUtils.allNotNull(dateTo, dateFrom)) {
+            calculateWithPeriod(row);
+        } else {
             adder.addValue(row.getPrice());
         }
     }
 
-    private boolean dateIsEqualsOrAfter(LocalDate date, LocalDate comparisonDate) {
-        return date.isAfter(comparisonDate) || date.equals(comparisonDate);
-    }
-
-    private boolean dateIsEqualsOrBefore(LocalDate date, LocalDate comparisonDate) {
-        return date.isBefore(comparisonDate) || date.equals(comparisonDate);
-    }
-
-    private void errorLog(Throwable throwable) {
-        log.error("calculate has finished with error: {}", throwable.getMessage());
+    private void calculateWithPeriod(ParsedRow row) {
+        if (DateUtils.dateIsEqualsOrAfter(row.getDate(), dateFrom) && DateUtils.dateIsEqualsOrBefore(row.getDate(), dateTo)) {
+            adder.addValue(row.getPrice());
+        }
     }
 
     @Override
     public String getResult() {
-        return String.format(RESULT_TEMPLATE, DateAdapter.format(dateFrom), DateAdapter.format(dateTo), adder.getAverageValue());
+        if (ObjectUtils.allNotNull(dateTo, dateFrom)) {
+            return String.format(RESULT_TEMPLATE_PERIOD, DateUtils.format(dateFrom), DateUtils.format(dateTo), adder.getAverageValue());
+        } else {
+            return String.format(RESULT_TEMPLATE, adder.getAverageValue());
+        }
     }
 }

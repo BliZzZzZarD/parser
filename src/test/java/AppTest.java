@@ -66,7 +66,7 @@ public class AppTest {
 
         assertTrue(parser.getResults().get(NAME1).getResult().contains("average value is 33.22"));
         assertTrue(parser.getResults().get(NAME2).getResult().contains("average value in the period with 01-Nov-2014 to 30-Nov-2014 is 32.87"));
-        assertTrue(parser.getResults().get(NAME3).getResult().contains("[INSTRUMENT3, 06-Nov-2014, 33.48]"));
+        assertTrue(parser.getResults().get(NAME3).getResult().contains("INSTRUMENT3, 06-Nov-2014, 33.48"));
     }
 
     private void logError() {
