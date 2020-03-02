@@ -33,6 +33,9 @@ public class Terminal {
 
     private Scanner scanner;
 
+    private Terminal() {
+    }
+
     public static Terminal getTerminal() {
         Terminal tempTerminal = terminal;
         if (tempTerminal == null) {
