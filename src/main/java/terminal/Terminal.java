@@ -20,7 +20,7 @@ public class Terminal {
 
     private static final Map<String, Command> commands = new HashMap<>();
 
-    private Command wrongCommand = new WrongCommand();
+    private final Command wrongCommand = new WrongCommand();
     private boolean terminalLaunched = false;
 
     @Setter @Getter
